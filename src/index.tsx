@@ -117,14 +117,18 @@ export const useAxiosCache = <T,>(
   useEffect(() => {
     const endpoint = new URL(url);
     const path = endpoint.pathname;
-    const params = endpoint.searchParams.values();
+
+    const params: string[] = [];
+    endpoint.searchParams.forEach((_, v) => {
+      params.push(v);
+    });
 
     // Merge the configuration together with requested query string
     // parameters in order to generate a unique invalidator value.
     const mergedConfig = {
       ...defaultConfig,
       ...config,
-      invalidator: [params, config?.invalidator].join('_'),
+      invalidator: [...params, config?.invalidator].join('_'),
     };
 
     // see https://axios-http.com/docs/cancellation
