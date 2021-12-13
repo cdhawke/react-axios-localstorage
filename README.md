@@ -1,5 +1,9 @@
 # react-axios-localstorage
 
+`react-axios-localstorage` is a simple hook that wraps `axios` and automatically serializes and caches the results in browser localstorage. This package is not designed to be used on the server, but the main functionality is wrapped in `useEffect`, so should be safe to use in the context of `Next.js`. The hook will attempt to read the value from localstorage before subsequent requests, and supports several forms of cache invalidation.
+
+**Important:** Only `axios.get` requests are supported and will be cached.
+
 ## Install
 
 Using npm
@@ -15,8 +19,6 @@ yarn add react-axios-localstorage
 ```
 
 ## Usage
-
-**Important:** Only `axios.get` requests are supported and will be cached.
 
 ### Default implementation
 
@@ -69,3 +71,11 @@ const { data, loading } = useAxiosLocalstorage(
 ```
 
 ## Configuration
+
+| Option           | Type      | Default                                                                                                         | Purpose                                                                                                       |
+| ---------------- | --------- | --------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| `invalidator`    | `string`  | `undefined` if no query string parameters are provided, otherwise it will use the query string parameter values | Used as a custom field for determining when to refresh the cached localstorage value                          |
+| `bypass`         | `boolean` | `false`                                                                                                         | Indicates whether to skip caching and cache checking for an individual request - useful for CMS preview modes |
+| `prefix`         | `string`  | `ral`                                                                                                           | Added to the front of each cache key to provide uniqueness                                                    |
+| `version`        | `string`  | `process.env.GITHUB_ACTIONS && process.env.GITHUB_SHA`                                                          | Used for version-based invalidations on CI/CD redeploys or releases                                           |
+| `invalidationMS` | `number`  | `300000` (5 minutes)                                                                                            | A time in ms after which the cache key will be invalidated                                                    |
