@@ -146,19 +146,23 @@ export const useAxiosCache = <T,>(
 
     // Make our axios GET request
     (async () => {
-      const response = await axios.get(url, {
-        ...axiosConfig,
-        signal: controller.signal,
-      });
-
-      if (response.status > 201) {
-        throw response;
+      try {
+        const response = await axios.get(url, {
+          ...axiosConfig,
+          signal: controller.signal,
+        });
+        setStatus({ data: response.data, loading: false });
+        // When not intentionally bypassed, we want to update the cached data with the response.
+        !mergedConfig.bypass &&
+          setLocal(cacheKey, path, response.data, mergedConfig);
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          console.error(error.toJSON());
+        } else {
+          console.error({ error });
+        }
+        setStatus({ data: null, loading: false });
       }
-      setStatus({ data: response.data, loading: false });
-
-      // When not intentionally bypassed, we want to update the cached data with the response.
-      !mergedConfig.bypass &&
-        setLocal(cacheKey, path, response.data, mergedConfig);
     })();
 
     return () => controller.abort();
