@@ -119,8 +119,8 @@ export const useAxiosCache = <T,>(
     const path = endpoint.pathname;
 
     const params: string[] = [];
-    endpoint.searchParams.forEach((_, v) => {
-      params.push(v);
+    endpoint.searchParams.forEach((k) => {
+      params.push(k);
     });
 
     // Merge the configuration together with requested query string
