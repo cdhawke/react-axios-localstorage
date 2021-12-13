@@ -6,6 +6,8 @@
 
 ## Install
 
+> **Prerequisites**: peerDependencies include `axios >= 0.22.0` and `react 16.8.0 || >= 17.0.0`
+
 Using npm
 
 ```sh
