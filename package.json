@@ -34,8 +34,8 @@
   },
   "homepage": "https://github.com/cdhawke/react-axios-localstorage#react-axios-localstorage",
   "peerDependencies": {
-    "axios": "^0.24.0",
-    "react": "^17.0.2"
+    "axios": ">= 0.22.0",
+    "react": "16.8.0 || >= 17.0.0"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^21.0.1",
