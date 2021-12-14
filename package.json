@@ -1,6 +1,6 @@
 {
   "name": "react-axios-localstorage",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "React + Axios hook for client browser localstorage caching.",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
