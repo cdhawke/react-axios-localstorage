@@ -16,9 +16,17 @@ describe('React Axios Localstorage', () => {
     const { result, waitForNextUpdate } = renderHook(() =>
       useAxiosCache('key', 'https://myurl.com/endpoint')
     );
-    expect(result.current).toEqual({ data: null, loading: true });
+    expect(result.current).toEqual({
+      data: undefined,
+      error: undefined,
+      loading: true,
+    });
     expect(axios.get).toHaveBeenCalledTimes(1);
     await waitForNextUpdate();
-    expect(result.current).toEqual({ data: 'yay', loading: false });
+    expect(result.current).toEqual({
+      data: 'yay',
+      error: undefined,
+      loading: false,
+    });
   });
 });

@@ -1,4 +1,4 @@
-import axios, { AxiosRequestConfig } from 'axios';
+import axios, { AxiosError, AxiosRequestConfig } from 'axios';
 import { useEffect, useState } from 'react';
 import { getLocal, setLocal } from './localstorage';
 
@@ -73,7 +73,8 @@ export interface AxiosCacheConfigProps {
 }
 
 export interface AxiosCacheStatus<T> {
-  data: T | null;
+  data: T | undefined;
+  error: AxiosError | unknown | undefined;
   loading: boolean;
 }
 
@@ -105,7 +106,8 @@ export const useAxiosCache = <T,>(
   axiosConfig?: AxiosRequestConfig<unknown>
 ): AxiosCacheStatus<T> => {
   const [status, setStatus] = useState<AxiosCacheStatus<T>>({
-    data: null,
+    data: undefined,
+    error: undefined,
     loading: true,
   });
 
@@ -140,7 +142,7 @@ export const useAxiosCache = <T,>(
 
     // Bypass the axios call when cached data has been retrieved from localstorage.
     if (cachedData) {
-      setStatus({ data: cachedData, loading: false });
+      setStatus({ data: cachedData, error: undefined, loading: false });
       return;
     }
 
@@ -151,7 +153,7 @@ export const useAxiosCache = <T,>(
           ...axiosConfig,
           signal: controller.signal,
         });
-        setStatus({ data: response.data, loading: false });
+        setStatus({ data: response.data, error: undefined, loading: false });
         // When not intentionally bypassed, we want to update the cached data with the response.
         !mergedConfig.bypass &&
           setLocal(cacheKey, path, response.data, mergedConfig);
@@ -161,7 +163,7 @@ export const useAxiosCache = <T,>(
         } else {
           console.error({ error });
         }
-        setStatus({ data: null, loading: false });
+        setStatus({ data: undefined, error, loading: false });
       }
     })();
 
